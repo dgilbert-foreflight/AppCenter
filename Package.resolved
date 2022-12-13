@@ -1,0 +1,59 @@
+{
+  "pins" : [
+    {
+      "identity" : "console-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/console-kit.git",
+      "state" : {
+        "revision" : "a7e67a1719933318b5ab7eaaed355cde020465b1",
+        "version" : "4.5.0"
+      }
+    },
+    {
+      "identity" : "get",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/Get.git",
+      "state" : {
+        "revision" : "a7dd8e0233d4041330591445de21b7e5d4c953c6",
+        "version" : "1.0.4"
+      }
+    },
+    {
+      "identity" : "httpheaders",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CreateAPI/HTTPHeaders.git",
+      "state" : {
+        "revision" : "96c4cb3fcb904c12891c9d65c902fbb691453562",
+        "version" : "0.1.1"
+      }
+    },
+    {
+      "identity" : "keychainwrapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/spydercapriani/KeychainWrapper.git",
+      "state" : {
+        "revision" : "69f7f5bc5c83433d993b5e8d87e52b5f49ab667d",
+        "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log.git",
+      "state" : {
+        "revision" : "6fe203dc33195667ce1759bf0182975e4653ba1c",
+        "version" : "1.4.4"
+      }
+    },
+    {
+      "identity" : "urlqueryencoder",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CreateAPI/URLQueryEncoder.git",
+      "state" : {
+        "revision" : "4ce950479707ea109f229d7230ec074a133b15d7",
+        "version" : "0.2.1"
+      }
+    }
+  ],
+  "version" : 2
+}

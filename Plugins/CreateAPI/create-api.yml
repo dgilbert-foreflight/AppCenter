@@ -1,0 +1,26 @@
+##############################################################################
+#                         CreateAPI Configuration                            #
+# See https://github.com/CreateAPI/CreateAPI/blob/main/Docs/ConfigOptions.md #
+##############################################################################
+
+access: public
+spaceWidth: 2
+useNaiveDate: false
+
+generate:
+  - paths
+  - entities
+  - enums
+
+module: "AppCenter"
+paths:
+  namespace: "API"
+
+entities:
+  # Automatically generate Identifiable conformance for entities that include
+  # an id property.
+  includeIdentifiableConformance: true
+
+rename:
+  entities:
+    "Error": "AppCenterError"
