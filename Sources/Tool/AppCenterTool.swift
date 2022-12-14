@@ -6,12 +6,12 @@
 //
 
 import Foundation
-import ConsoleKit
+import ArgumentParser
 import AppCenter
 import KeychainWrapper
 
 @main
-struct AppCenterTool: AsyncCommandGroup {
+struct AppCenterTool: AsyncParsableCommand {
 
   @SecureItem(
     name: "AppCenterAPI Token"
@@ -22,33 +22,37 @@ struct AppCenterTool: AsyncCommandGroup {
     }
   }
 
-  let commands: [String : AnyAsyncCommand] = [
-    "init": SetupCommand(),
-    "collaborator": CollaboratorsCommand(),
-  ]
+  static let configuration = CommandConfiguration(
+    commandName: "acbot",
+    abstract: "A utility for interacting with AppCenter.",
+    usage: nil,
+    discussion: "",
+    version: "1.0.0",
+    shouldDisplay: true,
+    subcommands: [
+      Init.self,
+      Collaborators.self,
+    ],
+    defaultSubcommand: nil,
+    helpNames: nil
+  )
 
-  let help: String = "Collection of Tools for interacting with App Center"
+  public static func main() async {
+    do {
+      if let apiToken = Self.token {
+        AppCenter.API.token = apiToken
+      } else if !CommandLine.arguments.contains(where: { $0 == "init" }) {
+        throw ValidationError("Please run `init` command to setup api token first!")
+      }
 
-  static func main() async throws {
-    let console: Console = Terminal()
-    let input = CommandInput(arguments: CommandLine.arguments)
-    let context = CommandContext(
-      console: console,
-      input: input
-    )
-
-    if Self.token == nil {
-      console.error("App Center API token not setup in keychain!")
-      console.info("Running setup command...")
-      let emptyContext = CommandContext(
-        console: console,
-        input: .init(arguments: [CommandLine.arguments.removeFirst()])
-      )
-      try await console.run(SetupCommand(), with: emptyContext)
+      var command = try parseAsRoot()
+      if var asyncCommand = command as? AsyncParsableCommand {
+        try await asyncCommand.run()
+      } else {
+        try command.run()
+      }
+    } catch {
+      exit(withError: error)
     }
-    AppCenter.API.token = Self.token!
-
-    let group = AppCenterTool()
-    try await console.run(group, with: context)
   }
 }

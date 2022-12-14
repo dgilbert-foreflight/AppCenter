@@ -20,7 +20,7 @@ let package = Package(
     .package(url: "https://github.com/kean/Get.git", from: "1.0.2"),
     .package(url: "https://github.com/CreateAPI/HTTPHeaders.git", from: "0.1.0"),
     .package(url: "https://github.com/CreateAPI/URLQueryEncoder.git", from: "0.2.0"),
-    .package(url: "https://github.com/vapor/console-kit.git", from: "4.4.1"),
+    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
     .package(url: "https://github.com/spydercapriani/KeychainWrapper.git", from: "1.2.0"),
   ],
   targets: [
@@ -42,7 +42,7 @@ let package = Package(
       name: "Tool",
       dependencies: [
         "AppCenter",
-        .product(name: "ConsoleKit", package: "console-kit"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "KeychainWrapper", package: "KeychainWrapper"),
       ]
     ),
