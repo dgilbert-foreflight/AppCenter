@@ -21,6 +21,9 @@ entities:
   # an id property.
   includeIdentifiableConformance: true
 
-rename:
-  entities:
-    "Error": "AppCenterError"
+  exclude:
+    - Error             # Manually maintained by APIError
+    - ErrorResponse     # Manually maintained by APIError
+    - ErrorDetails      # Manually maintained by APIError
+    - ErrorResponsev2   # duplicates ErrorResponse
+    - ErrorDetailsv2    # duplicates ErrorDetails

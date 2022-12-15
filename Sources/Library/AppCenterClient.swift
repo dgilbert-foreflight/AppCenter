@@ -38,8 +38,20 @@ private struct AppCenterClientDelegate: APIClientDelegate {
     self.token = token
   }
 
+  /// Sets the necessary authorization header
   func client(_ client: APIClient, willSendRequest request: inout URLRequest) async throws {
     request.setValue(token, forHTTPHeaderField: "X-API-Token")
+  }
+
+  /// Decode API errors
+  func client(_ client: APIClient, validateResponse response: HTTPURLResponse, data: Data, task: URLSessionTask) throws {
+    let successfulHTTPCodes = 200..<300
+
+    guard !successfulHTTPCodes.contains(response.statusCode) else {
+      return
+    }
+
+    throw try JSONDecoder().decode(APIError.self, from: data)
   }
 }
 
