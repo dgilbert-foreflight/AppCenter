@@ -15,8 +15,10 @@ let package = Package(
   products: [
     .library(name: "AppCenter", targets: ["AppCenter"]),
     .executable(name: "acbot", targets: ["Tool"]),
+    .executable(name: "slackbot", targets: ["App"]),
   ],
   dependencies: [
+    .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
     .package(url: "https://github.com/kean/Get.git", from: "1.0.2"),
     .package(url: "https://github.com/CreateAPI/HTTPHeaders.git", from: "0.1.0"),
     .package(url: "https://github.com/CreateAPI/URLQueryEncoder.git", from: "0.2.0"),
@@ -44,6 +46,22 @@ let package = Package(
         "AppCenter",
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         .product(name: "KeychainWrapper", package: "KeychainWrapper"),
+      ]
+    ),
+    
+    // MARK: - App
+    
+    .executableTarget(
+      name: "App",
+      dependencies: [
+        .product(name: "Vapor", package: "vapor"),
+        "AppCenter",
+      ],
+      swiftSettings: [
+        // Enable better optimizations when building in Release configuration. Despite the use of
+        // the `.unsafeFlags` construct required by SwiftPM, this flag is recommended for Release
+        // builds. See <https://github.com/swift-server/guides/blob/main/docs/building.md#building-for-production> for details.
+        .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
       ]
     ),
 
