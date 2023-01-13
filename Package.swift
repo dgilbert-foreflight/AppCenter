@@ -15,15 +15,15 @@ let package = Package(
   products: [
     .library(name: "AppCenter", targets: ["AppCenter"]),
     .executable(name: "acbot", targets: ["Tool"]),
-    .executable(name: "slackbot", targets: ["App"]),
+    .executable(name: "SlackApp", targets: ["SlackApp"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
     .package(url: "https://github.com/kean/Get.git", from: "1.0.2"),
     .package(url: "https://github.com/CreateAPI/HTTPHeaders.git", from: "0.1.0"),
     .package(url: "https://github.com/CreateAPI/URLQueryEncoder.git", from: "0.2.0"),
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
     .package(url: "https://github.com/spydercapriani/KeychainWrapper.git", from: "1.2.0"),
+    .package(url: "https://github.com/SwiftBlocksUI/SwiftBlocksUI.git", from: "0.9.4"),
   ],
   targets: [
     // MARK: - Library
@@ -52,9 +52,9 @@ let package = Package(
     // MARK: - App
     
     .executableTarget(
-      name: "App",
+      name: "SlackApp",
       dependencies: [
-        .product(name: "Vapor", package: "vapor"),
+        "SwiftBlocksUI",
         "AppCenter",
       ],
       swiftSettings: [
