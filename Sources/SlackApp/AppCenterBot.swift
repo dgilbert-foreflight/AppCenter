@@ -15,8 +15,4 @@ struct AppCenterBot: App {
   var body: some Endpoints {
     Collaborators()
   }
-  
-  init() {
-    AppCenter.API.token = ProcessInfo.processInfo.environment["APPCENTER_API_TOKEN"]
-  }
 }

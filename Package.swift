@@ -21,7 +21,7 @@ let package = Package(
     .package(url: "https://github.com/kean/Get.git", from: "1.0.2"),
     .package(url: "https://github.com/CreateAPI/HTTPHeaders.git", from: "0.1.0"),
     .package(url: "https://github.com/CreateAPI/URLQueryEncoder.git", from: "0.2.0"),
-    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
+    .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.0"),
     .package(url: "https://github.com/spydercapriani/KeychainWrapper.git", from: "1.2.0"),
     .package(url: "https://github.com/SwiftBlocksUI/SwiftBlocksUI.git", from: "0.9.4"),
   ],
@@ -33,7 +33,7 @@ let package = Package(
       dependencies: [
         .product(name: "Get", package: "Get"),
         .product(name: "HTTPHeaders", package: "HTTPHeaders"),
-        .product(name: "URLQueryEncoder", package: "URLQueryEncoder")
+        .product(name: "URLQueryEncoder", package: "URLQueryEncoder"),
       ],
       path: "Sources/Library"
     ),

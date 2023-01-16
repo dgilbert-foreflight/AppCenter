@@ -8,43 +8,34 @@
 import Foundation
 import Get
 
-public typealias AppCenterToken = String
-
-@propertyWrapper
-public struct AppCenterClient {
-
-  public var wrappedValue: APIClient
-
-  public init(
-    _ token: AppCenterToken
-  ) {
-    let configuration = APIClient.Configuration.init(
-      baseURL: URL(string: "https://api.appcenter.ms")!,
-      sessionConfiguration: .default,
-      delegate: MultiAPIClientDelegate([
-        AppCenterClientDelegate(token),
-      ])
-    )
-    self.wrappedValue = APIClient(configuration: configuration)
+// MARK: - Client
+public extension API {
+  
+  static var clientProvider: (TokenProvider) -> APIClient = { provider in
+      .init(
+        baseURL: URL(string: "https://api.appcenter.ms")!
+      ) {
+        $0.delegate = AppCenterClientDelegate(provider)
+      }
   }
+  
+  static var client: APIClient = clientProvider(.environment)
 }
 
-private struct AppCenterClientDelegate: APIClientDelegate {
+// MARK: - Client Request / Response Delegate
+public struct AppCenterClientDelegate: APIClientDelegate {
+  
+  let provider: TokenProvider
 
-  // Tokens are long-lived
-  let token: AppCenterToken
-
-  init(_ token: AppCenterToken) {
-    self.token = token
-  }
+  public init(_ provider: TokenProvider) { self.provider = provider }
 
   /// Sets the necessary authorization header
-  func client(_ client: APIClient, willSendRequest request: inout URLRequest) async throws {
-    request.setValue(token, forHTTPHeaderField: "X-API-Token")
+  public func client(_ client: APIClient, willSendRequest request: inout URLRequest) async throws {
+    request.setValue(provider.token, forHTTPHeaderField: "X-API-Token")
   }
 
   /// Decode API errors
-  func client(_ client: APIClient, validateResponse response: HTTPURLResponse, data: Data, task: URLSessionTask) throws {
+  public func client(_ client: APIClient, validateResponse response: HTTPURLResponse, data: Data, task: URLSessionTask) throws {
     let successfulHTTPCodes = 200..<300
 
     guard !successfulHTTPCodes.contains(response.statusCode) else {
@@ -55,14 +46,22 @@ private struct AppCenterClientDelegate: APIClientDelegate {
   }
 }
 
-public extension API {
+// MARK: App Center Token Provider
+public struct TokenProvider {
+  
+  let provider: () -> String
+  public var token: String { provider() }
+  
+  public init(provider: @escaping () -> String) { self.provider = provider }
+}
 
-  static var token: AppCenterToken! {
-    didSet {
-      Self.client = AppCenterClient(token).wrappedValue
-    }
+// MARK: - Built-In Implementations
+extension TokenProvider {
+  
+  public static var environmentKey: String = "APPCENTER_TOKEN"
+  static let environment: TokenProvider = .init {
+    let token = ProcessInfo.processInfo.environment[environmentKey] ?? ""
+    assert(!token.isEmpty, "\(environmentKey) not set!")
+    return token
   }
-
-  @AppCenterClient(token)
-  static var client: APIClient
 }

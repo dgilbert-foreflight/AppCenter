@@ -35,7 +35,7 @@ struct Collaborators: App {
             .value
           
           resp.sendMessage {
-            Text("\(email) was added to \(appName)!")
+            Text("\(email) was added to \(appName)")
           }
         } catch {
           resp.sendMessage {
