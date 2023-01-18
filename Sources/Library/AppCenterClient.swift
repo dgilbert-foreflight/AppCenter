@@ -11,7 +11,7 @@ import Get
 // MARK: - Client
 public extension API {
   
-  static var clientProvider: (TokenProvider) -> APIClient = { provider in
+  static let clientProvider: (TokenProvider) -> APIClient = { provider in
       .init(
         baseURL: URL(string: "https://api.appcenter.ms")!
       ) {
@@ -57,6 +57,11 @@ public struct TokenProvider {
   public var token: String { provider() }
   
   public init(provider: @escaping () -> String) { self.provider = provider }
+}
+
+extension TokenProvider: ExpressibleByStringLiteral {
+  
+  public init(stringLiteral value: StringLiteralType) { self.init { value} }
 }
 
 // MARK: - Built-In Implementations
