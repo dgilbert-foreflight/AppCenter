@@ -37,12 +37,16 @@ public struct AppCenterClientDelegate: APIClientDelegate {
   /// Decode API errors
   public func client(_ client: APIClient, validateResponse response: HTTPURLResponse, data: Data, task: URLSessionTask) throws {
     let successfulHTTPCodes = 200..<300
-
-    guard !successfulHTTPCodes.contains(response.statusCode) else {
-      return
+    guard !successfulHTTPCodes.contains(response.statusCode) else { return }
+    
+    if let apiError = try? JSONDecoder().decode(APIError.self, from: data) {
+      throw apiError
+    } else {
+      let statusCodeDetails = HTTPURLResponse
+        .localizedString(forStatusCode: response.statusCode)
+        .localizedUppercase
+      throw APIError(details: .init(message: "\(response.statusCode): \(statusCodeDetails)"))
     }
-
-    throw try JSONDecoder().decode(APIError.self, from: data)
   }
 }
 
